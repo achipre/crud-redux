@@ -6,47 +6,19 @@ import {
   TableHead,
   TableHeaderCell,
   TableBody,
-  Title,
-  Badge
+  Title
 } from '@tremor/react'
-
-const users: Array<{
-  id: string
-  name: string
-  email: string
-  github: string
-}> = [
-  {
-    id: '1',
-    name: 'Peter Doe',
-    email: 'peterdoe@gmail.com',
-    github: 'peterdoe'
-  },
-  {
-    id: '2',
-    name: 'Jhon Smith',
-    email: 'johnsmith@gmail.com',
-    github: 'johnsmith'
-  },
-  {
-    id: '3',
-    name: 'Carmen Silla',
-    email: 'carmensilla@gmail.com',
-    github: 'carmensilla'
-  },
-  {
-    id: '4',
-    name: 'Victor Melo',
-    email: 'victormelo@gmail.com',
-    github: 'victormelo'
-  }
-]
-
-export function ListOfUser (): JSX.Element {
+import { useAppSelector } from '../hooks/store'
+import { useUserActions } from '../hooks/useUserActions'
+export function ListOfUser () {
+  const users = useAppSelector((state) => state.users)
+  const { removeUser } = useUserActions()
   return (
     <Card>
-      <Title color="red">Users</Title>
-      <Badge color="fuchsia">{users.length}</Badge>
+      <Title color="red">
+        Users
+      <span className="text-fuchsia-700 mx-3 px-2 bg-fuchsia-300">{users.length}</span>
+      </Title>
       <Table>
         <TableHead>
           <TableRow>
@@ -80,8 +52,9 @@ export function ListOfUser (): JSX.Element {
                     />
                   </svg>
                 </button>
-                <button>
+                <button type='button' onClick={() => { removeUser(item.id) }}>
                   <svg
+                    aria-label='Remove Element'
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
